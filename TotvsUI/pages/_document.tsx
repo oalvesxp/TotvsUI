@@ -4,7 +4,10 @@ export default function Document() {
   return (
     <>
       <Html lang="pt-br">
-        <Head />
+        <Head>
+          <link rel="icon" type="image/svg+xml" href="/icon.svg" />
+        </Head>
+
         <body>
           <Main />
           <NextScript />
