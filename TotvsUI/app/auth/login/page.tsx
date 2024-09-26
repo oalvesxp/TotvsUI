@@ -21,7 +21,7 @@ export default function Login() {
     })
 
     if (res?.error) {
-      setError(res.error)
+      setError('Usuário e/ou senha inválidos')
     } else {
       router.push('/private')
     }
@@ -86,7 +86,11 @@ export default function Login() {
                 </div>
               </div>
               <div>
-                {error && <p>{error}</p>}
+                {error && (
+                  <p className="py-4 justify-center text-center text-sm text-red-700 font-semibold">
+                    {error}
+                  </p>
+                )}
                 <button
                   type="submit"
                   className="flex w-full justify-center rounded-md bg-[#0089cc] px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-[#006799] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
