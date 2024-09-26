@@ -24,6 +24,7 @@ export default function Login() {
       setError('Usuário e/ou senha inválidos')
     } else {
       router.push('/private')
+      router.refresh()
     }
   }
 
