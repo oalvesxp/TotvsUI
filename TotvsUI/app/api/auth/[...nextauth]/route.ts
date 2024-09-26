@@ -28,7 +28,9 @@ export const authOptions = {
         )
 
         const user = await res.json()
-        if (!res.ok && !user) return null
+        console.log(user)
+
+        if (!res.ok && user.code !== 201) return null
 
         return user
       },
