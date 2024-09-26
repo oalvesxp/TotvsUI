@@ -21,7 +21,7 @@ export default function RootLayout({
       <html lang="pt-br">
         <body>
           <Header />
-          <main className="h-full flex justify-center items-center">
+          <main className="h-full flex justify-center flex-col items-center">
             {children}
           </main>
         </body>
