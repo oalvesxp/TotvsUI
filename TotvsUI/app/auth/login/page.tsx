@@ -1,8 +1,32 @@
 'use client'
 
 import Image from 'next/image'
+import { signIn } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
+import { useState } from 'react'
 
 export default function Login() {
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+  const [error, setError] = useState('')
+  const router = useRouter()
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+
+    const res = await signIn('credentials', {
+      redirect: false,
+      username,
+      password,
+    })
+
+    if (res?.error) {
+      setError(res.error)
+    } else {
+      router.push('/private')
+    }
+  }
+
   return (
     <>
       {/* Cabeçalho */}
@@ -21,7 +45,7 @@ export default function Login() {
 
           {/* Formulário */}
           <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-            <form action="/profile" method="POST" className="space-y-6">
+            <form onSubmit={handleSubmit} method="POST" className="space-y-6">
               <div>
                 <label
                   htmlFor="username"
@@ -31,6 +55,7 @@ export default function Login() {
                 </label>
                 <div className="mt-2">
                   <input
+                    onChange={(e) => setUsername(e.target.value)}
                     id="username"
                     name="username"
                     type="text"
@@ -49,6 +74,7 @@ export default function Login() {
                 </label>
                 <div className="mt-2">
                   <input
+                    onChange={(e) => setPassword(e.target.value)}
                     id="password"
                     name="password"
                     type="password"
@@ -60,6 +86,7 @@ export default function Login() {
                 </div>
               </div>
               <div>
+                {error && <p>{error}</p>}
                 <button
                   type="submit"
                   className="flex w-full justify-center rounded-md bg-[#0089cc] px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-[#006799] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
