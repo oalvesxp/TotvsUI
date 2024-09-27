@@ -1,6 +1,6 @@
 import NextAuth from 'next-auth/next'
 import CredentialProvider from 'next-auth/providers/credentials'
-import { TokenSVC } from './tokenSVC'
+import { TokenSVC, userSVC } from './sessionSVC'
 
 export const authOptions = {
   providers: [
@@ -15,19 +15,28 @@ export const authOptions = {
         password: { label: 'Insira sua senha', type: 'password' },
       },
       async authorize(credentials) {
+        const username = credentials?.username
+        const password = credentials?.password
+
         /** Autenticando o usuário */
-        const resToken = await TokenSVC.get(
-          credentials?.username,
-          credentials?.password
-        )
+        const tokenRES = await TokenSVC.get(username, password)
+        if (!tokenRES.ok) return null
+        const tokens = await tokenRES.json()
 
-        /** Se o retorno não for OK */
-        if (!resToken.ok) return null
-        const user = await resToken.json()
+        /** Dados do usuário */
+        const dataRES = await userSVC.get(tokens.access_token)
+        if (!dataRES.ok) return null
+        const data = await dataRES.json()
 
-        /** Fetch do usuário */
-
-        return user
+        return {
+          id: data.items[0].id,
+          name: data.items[0].displayName,
+          username: data.items[0].userName,
+          department: data.items[0].department,
+          active: data.items[0].active,
+          access_token: tokens.access_token,
+          refresh_token: tokens.refresh_token,
+        }
       },
     }),
   ],
@@ -39,6 +48,11 @@ export const authOptions = {
       if (user) {
         return {
           ...token,
+          id: totvs.id,
+          name: totvs.name,
+          username: totvs.username,
+          department: totvs.department,
+          active: totvs.active,
           access_token: totvs.access_token,
           refresh_token: totvs.refresh_token,
         }
@@ -49,7 +63,13 @@ export const authOptions = {
     session: async ({ session, token }: any) => {
       return {
         ...session,
-        user: {},
+        user: {
+          id: token.id,
+          name: token.name,
+          username: token.username,
+          department: token.department,
+          active: token.active,
+        },
         tokens: {
           access_token: token.access_token,
           refresh_token: token.refresh_token,
