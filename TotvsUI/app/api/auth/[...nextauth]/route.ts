@@ -22,13 +22,9 @@ export const authOptions = {
           credentials?.password
         )
 
-        if (!res.ok) {
-          console.log('[FETCH TOKEN FAIL]', res.status, res.statusText)
-          return null
-        }
-
+        /** Se o retorno não for OK */
+        if (!res.ok) return null
         const user = await res.json()
-        console.log('[TOKENS]', user)
 
         return user
       },
@@ -36,6 +32,7 @@ export const authOptions = {
   ],
   callbacks: {
     jwt: async ({ token, user }: any) => {
+      /** Sobrescrevendo o user padrão */
       const totvs = user as unknown as any
 
       if (user) {
