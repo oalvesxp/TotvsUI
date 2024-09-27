@@ -5,7 +5,7 @@ import {
 } from 'next-auth/middleware'
 
 const middleware = (req: NextRequestWithAuth) => {
-  console.log('[MIDDLEWARE_NEXT]', req.nextauth)
+  console.log('[MIDDLEWARE_NEXT_AUTH_TOKEN]', req.nextauth.token)
 }
 
 const callbackOptions: NextAuthMiddlewareOptions = {}
