@@ -1,8 +1,6 @@
 import NextAuth from 'next-auth/next'
 import CredentialProvider from 'next-auth/providers/credentials'
 import { TokenSVC } from './tokenSVC'
-import { UserSVC } from './userSVC'
-import { NextResponse } from 'next/server'
 
 export const authOptions = {
   providers: [
@@ -24,55 +22,41 @@ export const authOptions = {
           credentials?.password
         )
 
-        console.log(res)
-
-        const tokens = await res.json()
-        if (!res.ok && tokens.code !== 201) return null
-
-        /** Salvando os Tokens do usuário nos Cookies */
-        TokenSVC.save(NextResponse, tokens.access_token, tokens.refresh_token)
-
-        const data = await UserSVC(
-          `${process.env.TOTVS_API_URL}/api/framework/v1/users/`,
-          tokens.access_token
-        )
-
-        return {
-          id: data.items.id,
-          username: data.items.userName,
-          name: data.items.displayName,
-          department: data.items.department,
-          active: data.items.active,
-          access_token: tokens.access_token,
-          refresh_token: tokens.refresh_token,
+        if (!res.ok) {
+          console.log('[FETCH TOKEN FAIL]', res.status, res.statusText)
+          return null
         }
+
+        const user = await res.json()
+        console.log('[TOKENS]', user)
+
+        return user
       },
     }),
   ],
   callbacks: {
-    async jwt({ token, user }: any) {
+    jwt: async ({ token, user }: any) => {
+      const totvs = user as unknown as any
+
       if (user) {
-        token.id = user.id
-        token.username = user.username
-        token.name = user.name
-        token.department = user.department
-        token.active = user.active
-        token.access_token = user.access_token
-        token.refresh_token = user.refresh_token
+        return {
+          ...token,
+          access_token: totvs.access_token,
+          refresh_token: totvs.refresh_token,
+        }
       }
 
       return token
     },
-    async session({ session, token }: any) {
-      session.user.id = token.id
-      session.user.username = token.username
-      session.user.name = token.name
-      session.user.department = token.department
-      session.user.active = token.active
-      session.user.access_token = token.access_token
-      session.user.refresh_token - token.refresh_token
-
-      return session
+    session: async ({ session, token }: any) => {
+      return {
+        ...session,
+        user: {},
+        tokens: {
+          access_token: token.access_token,
+          refresh_token: token.refresh_token,
+        },
+      }
     },
   },
   pages: {
