@@ -16,15 +16,16 @@ export const authOptions = {
       },
       async authorize(credentials) {
         /** Autenticando o usuário */
-        const res = await TokenSVC.get(
-          `${process.env.TOTVS_API_URL}/api/oauth2/v1/token`,
+        const resToken = await TokenSVC.get(
           credentials?.username,
           credentials?.password
         )
 
         /** Se o retorno não for OK */
-        if (!res.ok) return null
-        const user = await res.json()
+        if (!resToken.ok) return null
+        const user = await resToken.json()
+
+        /** Fetch do usuário */
 
         return user
       },

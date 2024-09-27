@@ -1,8 +1,8 @@
 /** Salvando Tokens nos Cookies */
 export const TokenSVC = {
-  async get(url: string, username: any, password: any) {
+  async get(username: any, password: any) {
     return fetch(
-      `${url}?grant_type=password&username=${username}&password=${password}`,
+      `${process.env.TOTVS_API_URL}/api/oauth2/v1/token?grant_type=password&username=${username}&password=${password}`,
       {
         method: 'POST',
         headers: {
