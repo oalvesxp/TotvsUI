@@ -1,33 +1,28 @@
 import NextAuth from 'next-auth/next'
 import CredentialProvider from 'next-auth/providers/credentials'
-import { TokenSVC, userSVC } from './sessionSVC'
+import { TokenSVC, UserSVC } from './sessionSVC'
 
 export const authOptions = {
   providers: [
     CredentialProvider({
       name: 'Credentials',
       credentials: {
-        username: {
-          label: 'Insira seu usuário',
-          type: 'text',
-          placeholder: 'Ex: sp01\\nome.sobrenome',
-        },
-        password: { label: 'Insira sua senha', type: 'password' },
+        username: {},
+        password: {},
       },
       async authorize(credentials) {
         const username = credentials?.username
         const password = credentials?.password
 
-        /** Autenticando o usuário */
+        /** API oAuth: /api/oauth2/v1/token */
         const tokenRES = await TokenSVC.get(username, password)
-        if (!tokenRES.ok) return null
         const tokens = await tokenRES.json()
 
-        /** Dados do usuário */
-        const dataRES = await userSVC.get(tokens.access_token)
-        if (!dataRES.ok) return null
+        /** API users: /api/framework/v1/users */
+        const dataRES = await UserSVC.get(tokens.access_token)
         const data = await dataRES.json()
 
+        /** Mapeando dados do user totvs */
         return {
           id: data.items[0].id,
           name: data.items[0].displayName,
@@ -46,6 +41,7 @@ export const authOptions = {
       const totvs = user as unknown as any
 
       if (user) {
+        /** Mapeando os dados do Token */
         return {
           ...token,
           id: totvs.id,
@@ -61,6 +57,7 @@ export const authOptions = {
       return token
     },
     session: async ({ session, token }: any) => {
+      /** Mapeando os dados da Session */
       return {
         ...session,
         user: {
@@ -78,7 +75,7 @@ export const authOptions = {
     },
   },
   pages: {
-    signIn: '/auth/login',
+    signIn: '/',
   },
   secret: process.env.NEXTAUTH_SECRET,
 }
