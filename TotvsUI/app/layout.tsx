@@ -1,5 +1,4 @@
 import type { Metadata } from 'next'
-import { Header } from '@/components/header'
 import './globals.css'
 import { AuthProvider } from '@/providers/auth-provider'
 
@@ -20,10 +19,7 @@ export default function RootLayout({
     <AuthProvider>
       <html lang="pt-br">
         <body>
-          <Header />
-          <main className="h-full flex justify-center flex-col items-center">
-            {children}
-          </main>
+          <main className="h-full">{children}</main>
         </body>
       </html>
     </AuthProvider>
