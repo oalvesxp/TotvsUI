@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import './globals.css'
 import { AuthProvider } from '@/providers/auth-provider'
+import { NavLinks } from './ui/nav-links'
 
 export const metadata: Metadata = {
   title: {
@@ -18,8 +19,11 @@ export default function RootLayout({
   return (
     <AuthProvider>
       <html lang="pt-br">
-        <body>
-          <main className="h-full">{children}</main>
+        <body className="h-full">
+          <header className="w-full">
+            <NavLinks />
+          </header>
+          <main>{children}</main>
         </body>
       </html>
     </AuthProvider>

@@ -39,6 +39,7 @@ export default function Login() {
               width={0}
               height={0}
               alt="Totvs"
+              priority
               className="mx-auto h-12 w-auto"
             />
             <h2 className="mt-10 text-center text-2xl leading-9 tracking-tight text-gray-600">
