@@ -23,7 +23,7 @@ export default function Login() {
     if (res?.error) {
       setError('Usuário e/ou senha inválidos')
     } else {
-      router.push('/dashboard')
+      router.push('/prt/dashboard')
       router.refresh()
     }
   }

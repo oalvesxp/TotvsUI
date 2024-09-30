@@ -12,9 +12,9 @@ export function NavLinks() {
 
   return (
     <>
-      <div className="h-16 flex items-center text-black text-sm">
+      <div className="h-16 flex items-center text-black text-sm mb-10">
         <nav className="w-full flex items-center justify-between m-auto max-w-screen-xl sm:px-8 px-4">
-          <Link href="/dashboard">
+          <Link href="/prt/dashboard">
             <Image
               src="/logo.svg"
               width={0}
@@ -26,8 +26,10 @@ export function NavLinks() {
           <ul className="flex items-center justify-between gap-10">
             <li>
               <Link
-                className={`link ${pathname === '/dashboard' ? 'active' : ''}`}
-                href="/dashboard"
+                className={`link ${
+                  pathname === '/prt/dashboard' ? 'active' : ''
+                }`}
+                href="/prt/dashboard"
               >
                 Início
               </Link>
@@ -38,6 +40,16 @@ export function NavLinks() {
                 href="/public"
               >
                 Pública
+              </Link>
+            </li>
+            <li>
+              <Link
+                className={`link ${
+                  pathname === '/prt/almoxarifado' ? 'active' : ''
+                }`}
+                href="/prt/almoxarifado"
+              >
+                Almoxarifado
               </Link>
             </li>
             <li>
