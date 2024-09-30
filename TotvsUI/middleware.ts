@@ -3,9 +3,15 @@ import {
   NextRequestWithAuth,
   withAuth,
 } from 'next-auth/middleware'
+import { NextResponse } from 'next/server'
 
 const middleware = (req: NextRequestWithAuth) => {
-  console.log('[MIDDLEWARE_NEXT_AUTH_TOKEN]', req.nextauth.token)
+  const isProtect = req.nextUrl.pathname.startsWith('/prt')
+  const almoxRole = req.nextauth.token?.department === 'TI'
+
+  if (isProtect && !almoxRole) {
+    return NextResponse.rewrite(new URL('/errors/denied', req.url))
+  }
 }
 
 const callbackOptions: NextAuthMiddlewareOptions = {}
@@ -13,5 +19,5 @@ const callbackOptions: NextAuthMiddlewareOptions = {}
 export default withAuth(middleware, callbackOptions)
 
 export const config = {
-  matcher: '/dashboard',
+  matcher: ['/prt', '/prt/dashboard', '/prt/almoxarifado'],
 }
