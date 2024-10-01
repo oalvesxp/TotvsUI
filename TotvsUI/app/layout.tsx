@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import './globals.css'
 import { AuthProvider } from '@/providers/auth-provider'
-import { NavLinks } from './ui/nav-links'
+import { Navbar } from './ui/navbar'
 
 export const metadata: Metadata = {
   title: {
@@ -21,7 +21,7 @@ export default function RootLayout({
       <html lang="pt-br">
         <body className="h-full">
           <header className="w-full">
-            <NavLinks />
+            <Navbar />
           </header>
           <main>{children}</main>
         </body>
