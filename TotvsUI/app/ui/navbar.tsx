@@ -1,117 +1,136 @@
 'use client'
 
-import Link from 'next/link'
-import Image from 'next/image'
 import { useState } from 'react'
 import { usePathname } from 'next/navigation'
+import Link from 'next/link'
+import Image from 'next/image'
 
 export function Navbar() {
-  const [navbar, setNavbar] = useState(false)
+  const [isOpen, setIsOpen] = useState(false)
   const pathname = usePathname()
 
-  const onPage =
-    'block py-2 px-3 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 md:dark:text-blue-500'
-  const outPage =
-    'block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700'
+  const toggleMenu = () => {
+    setIsOpen(!isOpen)
+  }
+
+  const menuItems = [
+    { name: 'Início', href: '/' },
+    { name: 'Docs', href: '/public' },
+  ]
 
   if (pathname.startsWith('/prt')) return <></>
 
   return (
-    <>
-      <nav className="bg-white dark:bg-gray-900 fixed w-full z-20 top-0 start-0 border-b border-gray-200 dark:border-gray-600">
-        <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-          <Link
-            href="/"
-            onClick={navbar === true ? () => setNavbar(!navbar) : () => ''}
-          >
-            {/** Logo */}
+    <nav className="bg-white font-medium text-[#363636] p-4 md:border-b-4">
+      <div className="container mx-auto flex justify-between items-center">
+        {/* Logo */}
+        <div className="flex items-center">
+          <Link href="/" className="text-2xl font-bold">
             <Image
-              src="/logo-white.svg"
+              onClick={() => setIsOpen(false)}
+              src="/logo-dark.svg"
               width={0}
               height={0}
               alt="Totvs"
-              className="mx-auto h-6 w-auto"
+              className="h-6 w-auto"
             />
           </Link>
-          <div className="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
-            <Link href="/auth">
-              <button
-                onClick={navbar === true ? () => setNavbar(!navbar) : () => ''}
-                type="button"
-                className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-              >
-                Entrar
-              </button>
-            </Link>
-
-            <button
-              onClick={() => setNavbar(!navbar)}
-              data-collapse-toggle="navbar-sticky"
-              type="button"
-              className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
-            >
-              <span className="sr-only">Abrir menu</span>
-              {navbar ? (
-                <svg
-                  className="h-6 w-6"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth="1.5"
-                  stroke="#fafafa"
-                  aria-hidden="true"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                </svg>
-              ) : (
-                <svg
-                  className="block h-6 w-6"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth="1.5"
-                  stroke="#fafafa"
-                  aria-hidden="true"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
-                  />
-                </svg>
-              )}
-            </button>
-          </div>
-          <div
-            className={`items-center justify-between w-full md:flex md:w-auto md:order-1 ${
-              navbar ? '' : 'hidden'
-            }`}
-          >
-            <ul className="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
-              <li>
-                <Link
-                  onClick={() => setNavbar(!navbar)}
-                  href="/"
-                  className={`${pathname === '/' ? onPage : outPage}`}
-                >
-                  Início
-                </Link>
-              </li>
-              <li>
-                <Link
-                  onClick={() => setNavbar(!navbar)}
-                  href="/public"
-                  className={`${pathname === '/public' ? onPage : outPage}`}
-                >
-                  Public
-                </Link>
-              </li>
-            </ul>
-          </div>
         </div>
-      </nav>
-    </>
+
+        {/* Desktop Menu and Buttons */}
+        <div className="hidden md:flex items-center space-x-6">
+          {menuItems.map((item) => (
+            <Link
+              key={item.name}
+              href={item.href}
+              className={`hover:text-[#006799] ${
+                pathname === item.href ? 'text-[#0089cc] font-semibold' : ''
+              }`}
+            >
+              {item.name}
+            </Link>
+          ))}
+          <Link href="/auth">
+            <button
+              onClick={toggleMenu}
+              className="flex text-white items-center bg-[#0089cc] hover:bg-[#006799] py-2 px-4 rounded"
+            >
+              Login
+              <svg
+                className="ml-2 w-4 h-4 text-gray-800 dark:text-white"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 18 16"
+              >
+                <path
+                  stroke="currentColor"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M1 8h11m0 0L8 4m4 4-4 4m4-11h3a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-3"
+                ></path>
+              </svg>
+            </button>
+          </Link>
+        </div>
+
+        {/* Mobile Menu Button */}
+        <div className="md:hidden flex items-center">
+          <button
+            onClick={toggleMenu}
+            className="outline-none mobile-menu-button"
+          >
+            <svg
+              className="w-6 h-6 text-white"
+              fill="none"
+              stroke="#006799"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d={isOpen ? 'M6 18L18 6M6 6l12 12' : 'M4 6h16M4 12h16m-7 6h7'}
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      {/* Unified Menu (Mobile & Desktop) */}
+      {isOpen && (
+        <div className="md:hidden">
+          <ul className="flex flex-col space-y-4 mt-8">
+            {menuItems.map((item) => (
+              <li key={item.name} className="w-full text-center">
+                <Link
+                  onClick={toggleMenu}
+                  href={item.href}
+                  className={`hover:text-[#006799] block ${
+                    pathname === item.href
+                      ? 'text-[#0089cc] font-semibold bg-gray-200 rounded-sm py-2'
+                      : ''
+                  }`}
+                >
+                  {item.name}
+                </Link>
+              </li>
+            ))}
+            <li>
+              <Link href="/auth">
+                <button
+                  onClick={toggleMenu}
+                  className="text-white bg-[#0089cc] hover:bg-[#006799] py-2 px-4 rounded w-full"
+                >
+                  Iniciar sessão
+                </button>
+              </Link>
+            </li>
+          </ul>
+        </div>
+      )}
+    </nav>
   )
 }
