@@ -1,5 +1,7 @@
 'use client'
 
+import { Mail } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 import { useState } from 'react'
 import { usePathname } from 'next/navigation'
 import Link from 'next/link'
@@ -50,29 +52,12 @@ export function Navbar() {
               {item.name}
             </Link>
           ))}
-          <Link href="/auth">
-            <button
-              onClick={toggleMenu}
-              className="flex text-white items-center bg-[#0089cc] hover:bg-[#006799] py-2 px-4 rounded"
-            >
+          <Button onClick={toggleMenu}>
+            <Link href="/auth">
+              <Mail className="mr-2 h-4 w-4" />
               Iniciar sessão
-              <svg
-                className="ml-2 w-4 h-4 text-gray-800 dark:text-white"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 18 16"
-              >
-                <path
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M1 8h11m0 0L8 4m4 4-4 4m4-11h3a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-3"
-                ></path>
-              </svg>
-            </button>
-          </Link>
+            </Link>
+          </Button>
         </div>
 
         {/* Mobile Menu Button */}
