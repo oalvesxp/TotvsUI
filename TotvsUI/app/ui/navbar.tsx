@@ -10,7 +10,7 @@ export function Navbar() {
   const pathname = usePathname()
 
   const toggleMenu = () => {
-    setIsOpen(!isOpen)
+    setIsOpen(false)
   }
 
   const menuItems = [
@@ -21,7 +21,7 @@ export function Navbar() {
   if (pathname.startsWith('/prt')) return <></>
 
   return (
-    <nav className="bg-white font-medium text-[#363636] p-4 md:border-b-4">
+    <nav className="bg-white font-normal text-[#363636] p-4 md:border-b-4">
       <div className="container mx-auto flex justify-between items-center">
         {/* Logo */}
         <div className="flex items-center">
@@ -44,7 +44,7 @@ export function Navbar() {
               key={item.name}
               href={item.href}
               className={`hover:text-[#006799] ${
-                pathname === item.href ? 'text-[#0089cc] font-semibold' : ''
+                pathname === item.href ? 'text-[#0089cc]' : ''
               }`}
             >
               {item.name}
@@ -55,7 +55,7 @@ export function Navbar() {
               onClick={toggleMenu}
               className="flex text-white items-center bg-[#0089cc] hover:bg-[#006799] py-2 px-4 rounded"
             >
-              Login
+              Iniciar sessão
               <svg
                 className="ml-2 w-4 h-4 text-gray-800 dark:text-white"
                 aria-hidden="true"
@@ -78,7 +78,7 @@ export function Navbar() {
         {/* Mobile Menu Button */}
         <div className="md:hidden flex items-center">
           <button
-            onClick={toggleMenu}
+            onClick={() => setIsOpen(!isOpen)}
             className="outline-none mobile-menu-button"
           >
             <svg
@@ -118,13 +118,28 @@ export function Navbar() {
                 </Link>
               </li>
             ))}
-            <li>
+            <li className="w-full">
               <Link href="/auth">
                 <button
                   onClick={toggleMenu}
-                  className="text-white bg-[#0089cc] hover:bg-[#006799] py-2 px-4 rounded w-full"
+                  className="flex items-center justify-center text-white bg-[#0089cc] hover:bg-[#006799] py-2 px-4 rounded w-full"
                 >
-                  Iniciar sessão
+                  Login
+                  <svg
+                    className="ml-2 w-4 h-4 text-gray-800 dark:text-white"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 18 16"
+                  >
+                    <path
+                      stroke="currentColor"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M1 8h11m0 0L8 4m4 4-4 4m4-11h3a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-3"
+                    ></path>
+                  </svg>
                 </button>
               </Link>
             </li>
