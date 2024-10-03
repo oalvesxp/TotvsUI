@@ -6,6 +6,15 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog'
 
 import { signIn } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
@@ -15,10 +24,13 @@ export default function Dashboard() {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
+  const [isDialogOpen, setIsDialogOpen] = useState(false)
+  const [loading, setLoading] = useState(false)
   const router = useRouter()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    setLoading(true)
 
     const res = await signIn('credentials', {
       redirect: false,
@@ -26,8 +38,11 @@ export default function Dashboard() {
       password,
     })
 
+    setLoading(false)
+
     if (res?.error) {
       setError('Usuário e/ou senha inválidos')
+      setIsDialogOpen(true)
     } else {
       router.push('/dashboard')
       router.refresh()
@@ -62,7 +77,8 @@ export default function Dashboard() {
                   <div className="flex items-center">
                     <Label htmlFor="password">Senha</Label>
                     <Link
-                      href="/forgot-password"
+                      href="https://signus.freshservice.com/support/tickets/new"
+                      target="_blank"
                       className="ml-auto inline-block text-sm underline"
                     >
                       Esqueceu sua senha?
@@ -76,14 +92,38 @@ export default function Dashboard() {
                     required
                   />
                 </div>
-                <Button type="submit" className="w-full">
-                  Entrar
+                <Button type="submit" className="w-full" disabled={loading}>
+                  {loading ? 'Carregando...' : 'Entrar'}
                 </Button>
               </div>
+              {error && (
+                <AlertDialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle className="text-red-600">
+                        Usuário e/ou senha inválidos!
+                      </AlertDialogTitle>
+                      <AlertDialogDescription>
+                        Verifique e tente novamente.
+                      </AlertDialogDescription>
+                      <AlertDialogDescription>
+                        Se você não lembra das suas credenciais clique em
+                        "Esqueceu sua senha?"
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogAction className="bg-red-600 hover:bg-red-600/90">
+                        Fechar
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+              )}
               <div className="mt-4 text-center text-sm">
                 Precisa de ajuda?{' '}
                 <Link
                   href="https://signus.freshservice.com/support/tickets/new"
+                  target="_blank"
                   className="underline"
                 >
                   Ticket
