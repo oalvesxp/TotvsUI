@@ -1,7 +1,6 @@
 import type { Metadata } from 'next'
 import './globals.css'
 import { AuthProvider } from '@/providers/auth-provider'
-import { Navbar } from './ui/navbar'
 
 export const metadata: Metadata = {
   title: {
@@ -19,12 +18,7 @@ export default function RootLayout({
   return (
     <AuthProvider>
       <html lang="pt-br">
-        <body className="h-full">
-          <header className="w-full">
-            <Navbar />
-          </header>
-          <main>{children}</main>
-        </body>
+        <body>{children}</body>
       </html>
     </AuthProvider>
   )
