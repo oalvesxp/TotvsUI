@@ -16,17 +16,31 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog'
 
-import { signIn } from 'next-auth/react'
+import { signIn, useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 export default function Dashboard() {
+  const { data: session, status } = useSession()
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [loading, setLoading] = useState(false)
   const router = useRouter()
+
+  // Redireciona o usuário para o dashboard se ele já estiver logado
+  useEffect(() => {
+    if (status === 'authenticated') {
+      router.push('/dashboard')
+      router.refresh()
+    }
+  }, [status, router])
+
+  // Exibe um estado de carregamento enquanto verifica a sessão
+  if (status === 'loading' || status === 'authenticated') {
+    return <p>Carregando...</p>
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
