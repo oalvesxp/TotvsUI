@@ -39,7 +39,15 @@ export default function Dashboard() {
 
   // Exibe um estado de carregamento enquanto verifica a sessão
   if (status === 'loading' || status === 'authenticated') {
-    return <p>Carregando...</p>
+    return (
+      <main className="h-full">
+        <div className="w-full h-full xl:grid lg:min-h-[400px] xl:grid-cols-1 xl:min-h-[600px]">
+          <div className="h-full flex items-center justify-center py-12">
+            <p>Carregando...</p>
+          </div>
+        </div>
+      </main>
+    )
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
